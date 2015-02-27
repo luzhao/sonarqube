@@ -23,14 +23,15 @@ package org.sonar.server.issue.notification;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.sonar.api.issue.Issue;
+import org.sonar.api.utils.Duration;
 
-import static org.sonar.server.issue.notification.NewIssuesStatistics.METRICS.SEVERITY;
-import static org.sonar.server.issue.notification.NewIssuesStatistics.METRICS.TAGS;
+import static org.sonar.server.issue.notification.NewIssuesStatistics.METRICS.*;
 
 public class NewIssuesStatistics {
   // TODO TBE get rid of this magic value !
   private static final String GLOBAL_LOGIN = "#global.login#";
   private final Table<String, METRICS, String> stats = HashBasedTable.create();
+  private final Duration totalDebt = Duration.create(0L);
 
   public void add(Issue issue) {
     addForLogin(GLOBAL_LOGIN, issue);
@@ -41,6 +42,11 @@ public class NewIssuesStatistics {
 
   private void addForLogin(String login, Issue issue) {
     stats.put(login, SEVERITY, issue.severity());
+    stats.put(login, COMPONENT, issue.componentUuid());
+    if (issue.assignee() != null) {
+      stats.put(login, USER, issue.assignee());
+    }
+    totalDebt.add(issue.debt());
     for (String tag : issue.tags()) {
       stats.put(login, TAGS, tag);
     }
@@ -48,6 +54,6 @@ public class NewIssuesStatistics {
   }
 
   public enum METRICS {
-    SEVERITY, TAGS, FILE
+    SEVERITY, TAGS, COMPONENT, USER, DEBT
   }
 }
