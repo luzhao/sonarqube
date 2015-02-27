@@ -30,6 +30,8 @@ import org.sonar.core.component.ComponentDto;
 
 import java.util.Date;
 
+import static org.sonar.server.issue.notification.NewIssuesEmailTemplate.*;
+
 public class NewIssuesNotification extends Notification {
 
   public static final String TYPE = "new-issues";
@@ -39,14 +41,14 @@ public class NewIssuesNotification extends Notification {
   }
 
   public NewIssuesNotification setAnalysisDate(Date d) {
-    setFieldValue("projectDate", DateUtils.formatDateTime(d));
+    setFieldValue(FIELD_PROJECT_DATE, DateUtils.formatDateTime(d));
     return this;
   }
 
   public NewIssuesNotification setProject(ComponentDto project) {
-    setFieldValue("projectName", project.longName());
-    setFieldValue("projectKey", project.key());
-    setFieldValue("projectUuid", project.uuid());
+    setFieldValue(FIELD_PROJECT_NAME, project.longName());
+    setFieldValue(FIELD_PROJECT_KEY, project.key());
+    setFieldValue(FIELD_PROJECT_UUID, project.uuid());
     return this;
   }
 

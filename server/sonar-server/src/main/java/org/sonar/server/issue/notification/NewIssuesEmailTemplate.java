@@ -42,6 +42,7 @@ public class NewIssuesEmailTemplate extends EmailTemplate {
   public static final String FIELD_PROJECT_NAME = "projectName";
   public static final String FIELD_PROJECT_KEY = "projectKey";
   public static final String FIELD_PROJECT_DATE = "projectDate";
+  public static final String FIELD_PROJECT_UUID = "projectUuid";
 
   private final EmailSettings settings;
   private final I18n i18n;
@@ -81,7 +82,7 @@ public class NewIssuesEmailTemplate extends EmailTemplate {
   }
 
   private void appendFooter(StringBuilder sb, Notification notification) {
-    String projectUuid = notification.getFieldValue("projectUuid");
+    String projectUuid = notification.getFieldValue(FIELD_PROJECT_UUID);
     String dateString = notification.getFieldValue(FIELD_PROJECT_DATE);
     if (projectUuid != null && dateString != null) {
       Date date = DateUtils.parseDateTime(dateString);
